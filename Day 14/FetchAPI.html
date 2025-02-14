@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random User Fetch</title>
+    <style>
+        /* Basic styling for the page */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        /* Styling for the user info section */
+        #userInfo {
+            margin-top: 20px;
+        }
+
+        /* Styling for the user's profile picture */
+        img {
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Title and Button to fetch random user -->
+    <h2>Get a Random User</h2>
+    <button onclick="fetchRandomUser()">Get Random User</button>
+
+    <!-- This is where the user information will be displayed -->
+    <div id="userInfo"></div>
+
+    <script>
+        // Function to fetch random user
+        function fetchRandomUser() {
+            // We are using a public API to get random user data
+            fetch("https://randomuser.me/api/") // Fetch random user data
+                .then(response => {
+                    if (!response.ok) {  // Check if the response is okay
+                        throw new Error("Problem fetching data.");
+                    }
+                    return response.json();  // Convert the response into JSON
+                })
+                .then(data => {
+                    // We take the first user from the data returned
+                    const user = data.results[0];
+
+                    // Create HTML content to display user info
+                    const userInfo = `
+                        <p><strong>Name:</strong> ${user.name.first} ${user.name.last}</p>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <img src="${user.picture.large}" alt="User Profile">
+                    `;
+
+                    // Display the user info inside the 'userInfo' div
+                    document.getElementById("userInfo").innerHTML = userInfo;
+                })
+                .catch(error => {
+                    // If an error happens (like no internet), show this message
+                    console.error("Error fetching random user:", error);
+                });
+        }
+    </script>
+
+</body>
+</html>
